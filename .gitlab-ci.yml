@@ -17,7 +17,7 @@ stages:
   - package
   - upload
 
-.validate:
+validate:
   stage: validate
   script:
     - helm version
