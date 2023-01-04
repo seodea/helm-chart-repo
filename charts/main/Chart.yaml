@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: subchart-test
 description: Project template Helm chart for Kubernetes
 
