@@ -1,0 +1,81 @@
+default:
+  image:
+    name: wotnek90/helm-package:v1
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+variables:
+  CHART_NAME    : "subchart-test"
+  CHART_VERSION : "0.1.0"
+  PROJECT_ID    : ${CI_PROJECT_ID}
+  CHANNEL       : "sdh"
+
+stages:
+  - validate
+  - plan
+  - package
+  - upload
+
+.validate:
+  stage: validate
+  script:
+    - helm version
+    - helm lint ./charts/main
+  allow_failure: false
+  # only:
+  #   refs:
+  #     - gitlab-helm-package
+  tags:
+    # - shared-runner
+    - sdh-runner
+
+.plan:
+  stage: plan
+  script:
+    - helm template ./charts/main
+  allow_failure: false
+  # only:
+  #   refs:
+  #     - gitlab-helm-package
+  tags:
+    # - shared-runner
+    - sdh-runner
+
+.package:
+  stage: package
+  script:
+    - pwd
+    - ls -l
+    - helm package ./charts/main
+    - helm repo index ./charts/main
+    - cat ./charts/main/index.yaml
+    - sleep 36000
+  artifacts:
+    paths:
+      - ./${CHART_NAME}-${CHART_VERSION}.tgz
+      - ./charts/main/index.yaml
+  # when: manual
+  allow_failure: false
+  # only:
+  #   refs:
+  #     - gitlab-helm-package
+  tags:
+    # - shared-runner
+    - sdh-runner
+  
+.upload:
+  stage: upload
+  script:
+    - helm repo add --username sdh --password ${MY_ACCESS_TOKEN} ${CHART_NAME}-${CHART_VERSION} https://${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/packages/helm/${CHANNEL}
+    - helm cm-push ${CHART_NAME}-${CHART_VERSION}.tgz ${CHART_NAME}-${CHART_VERSION} 
+    # - curl --request POST --form 'chart=${CHART_NAME}-${CHART_VERSION}.tgz' --user ko900002:${MY_ACCESS_TOKEN} "https://${GITLAB_URL}/k8s/${CHART_NAME}"
+    # - curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@${CHART_NAME}-${CHART_VERSION}.tgz" "https://${GITLAB_URL}/k8s/${CHART_NAME}"
+  when: manual
+  allow_failure: false
+  # only:
+  #   refs:
+  #     - gitlab-helm-package
+  tags:
+    # - shared-runner
+    - sdh-runner

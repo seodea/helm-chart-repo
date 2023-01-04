@@ -1,0 +1,59 @@
+subchart-test: # Chart.lock에 있는 name으로 
+  title: "c project nginx service"
+  app: C
+  env: test
+
+  deployment:
+    replicas: 2
+    image:
+      repository: 932824558442.dkr.ecr.ap-northeast-2.amazonaws.com/nginx
+      tag: "1.23-alpine"
+      digest: ""
+      pullPolicy: IfNotPresent
+
+    port:
+      enabled: true
+      containerport: 80
+
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+
+    livenessProbe: {}
+      # httpGet:
+      #   path: /
+      #   port: http
+
+    readinessProbe: {}
+      # httpGet:
+      #   path: /
+      #   port: http
+
+  service:
+    enabled: true
+    name: http
+    type: NodePort
+    port: 80
+
+  basic_ingress: 
+    enabled: false
+
+  ingress:
+    enabled: false
+    
+    scheme: internet-facing #internet-facing or internal
+    target_type: ip #select target-type 지정 (ip | instance(기본값))
+    subnets: subnet-0231fb8e2dc62b501,subnet-0d30648d1b8b50f86
+    security_groups: sg-03883e20788510d82
+
+    hosts:
+      - host: #chart-example.local
+        paths:
+          - path: /C-test
+            pathType: Prefix #Exact, Prefix
+          - path: /C-test-site
+            pathType: Exact

@@ -1,0 +1,59 @@
+subchart-test: # Chart.lock에 있는 name으로 
+  title: "dev-echoserver-project"
+  app: B
+  env: prod
+
+  deployment:
+    replicas: 4
+    image:
+      repository: ealen/echo-server
+      tag: "latest"
+      digest: ""
+      pullPolicy: IfNotPresent
+
+    port:
+      enabled: true
+      containerport: 80
+
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+
+    livenessProbe: {}
+      # httpGet:
+      #   path: /
+      #   port: http
+
+    readinessProbe: {}
+      # httpGet:
+      #   path: /
+      #   port: http
+
+  service:
+    enabled: true
+    name: http
+    type: NodePort
+    port: 80
+
+  basic_ingress: 
+    enabled: false
+
+  ingress:
+    enabled: false
+    
+    scheme: internet-facing #internet-facing or internal
+    target_type: ip #select target-type 지정 (ip | instance(기본값))
+    subnets: subnet-01925fe3fdb467412,subnet-0183b83ada5e17406 #(public subnet - argocd public subnet)
+    security_groups: sg-05da8f99ad01efcdb
+
+    hosts:
+      - host: #chart-example.local
+        paths:
+          - path: /
+            pathType: Prefix #Exact, Prefix
+          - path: /b-prod-site
+            pathType: Exact

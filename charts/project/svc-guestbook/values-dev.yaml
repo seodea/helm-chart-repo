@@ -1,0 +1,60 @@
+# dependency 설정
+subchart-test: # Chart.lock에 있는 name으로 
+  title: "a project guestbook"
+  app: A
+  env: dev
+
+  deployment:
+    replicas: 1
+    image:
+      repository: gcr.io/heptio-images/ks-guestbook-demo
+      tag: "0.2"
+      digest: ""
+      pullPolicy: IfNotPresent
+
+    port:
+      enabled: true
+      containerport: 80
+
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+
+    livenessProbe: {}
+      # httpGet:
+      #   path: /
+      #   port: http
+
+    readinessProbe: {}
+      # httpGet:
+      #   path: /
+      #   port: http
+
+  service:
+    enabled: true
+    name: http
+    type: NodePort
+    port: 80
+
+  basic_ingress: 
+    enabled: false
+
+  ingress:
+    enabled: false
+    
+    scheme: internet-facing #internet-facing or internal
+    target_type: ip #select target-type 지정 (ip | instance(기본값))
+    subnets: subnet-0231fb8e2dc62b501,subnet-0d30648d1b8b50f86
+    security_groups: sg-03883e20788510d82
+
+    hosts:
+      - host: #chart-example.local
+        paths:
+          - path: /A-dev
+            pathType: Prefix #Exact, Prefix
+          - path: /A-dev-site
+            pathType: Exact

@@ -1,0 +1,29 @@
+# 사용하는 Helm package
+Gitlab helm package를 사용하고 있습니다.
+
+아래는 Argo CD Application 생성 yaml 파일
+
+```
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: use-gitlab-helm-package-registry
+spec:
+  destination:
+    name: ''
+    namespace: use-gitlab-helm-package-registry
+    server: >-
+      https://D000039B8B4100092B595E786DD85A0E.gr7.ap-northeast-2.eks.amazonaws.com
+  source:
+    path: charts/C-service
+    repoURL: 'https://github.com/seodea/helm-subchart.git'
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - values-dev.yaml
+  project: dev-in-cluster
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+```
+
