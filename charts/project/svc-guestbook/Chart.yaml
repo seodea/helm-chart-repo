@@ -5,7 +5,7 @@ version: 1.0.0
 dependencies:
   - name: subchart-test # Parent chart name 이름 
     version: 0.1.0 # Parent chart version 기입
-    repository: "@github-helm" # parent chart path (Argo CD repositories)
-    # repository: "https://seodea.github.io/helm-package/charts/main" # parent chart path
+    repository: "https://gitlab.mzcloud.xyz/api/v4/projects/328/packages/helm/sdh" # parent chart path
+    # repository: "@github-helm" # parent chart path (Argo CD repositories)
     # repository: "file://../main/" # parent chart path
 

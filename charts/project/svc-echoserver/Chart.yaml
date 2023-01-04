@@ -6,5 +6,5 @@ version: 1.0.0
 dependencies:
   - name: subchart-test # parent chart name
     version: 0.1.0 # parent chart version
-    repository: "file://../../main/" # parent chart path
+    repository: "file://../../main/" # parent chart path -
 
