@@ -23,24 +23,22 @@ validate:
     - helm version
     - helm lint ./charts/main
   allow_failure: false
-  # only:
-  #   refs:
-  #     - gitlab-helm-package
+  only:
+    refs:
+      - main
   tags:
-    # - shared-runner
-    - sdh-runner
+    - shared-runner
 
 plan:
   stage: plan
   script:
     - helm template ./charts/main
   allow_failure: false
-  # only:
-  #   refs:
-  #     - gitlab-helm-package
+  only:
+    refs:
+      - main
   tags:
-    # - shared-runner
-    - sdh-runner
+    - shared-runner
 
 package:
   stage: package
@@ -55,12 +53,11 @@ package:
       - ./charts/main/index.yaml
   # when: manual
   allow_failure: false
-  # only:
-  #   refs:
-  #     - gitlab-helm-package
+  only:
+    refs:
+      - main
   tags:
-    # - shared-runner
-    - sdh-runner
+    - shared-runner
   
 upload:
   stage: upload
@@ -71,9 +68,8 @@ upload:
     # - curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@${CHART_NAME}-${CHART_VERSION}.tgz" "https://${GITLAB_URL}/k8s/${CHART_NAME}"
   when: manual
   allow_failure: false
-  # only:
-  #   refs:
-  #     - gitlab-helm-package
+  only:
+    refs:
+      - main
   tags:
-    # - shared-runner
-    - sdh-runner
+    - shared-runner
