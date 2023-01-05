@@ -15,7 +15,7 @@ _helpers.tpl은 필요 시 변수값을 가공을 해야될때, 사용을 합니
 
 ```
 .
-├── Chart.yaml # 
+├── Chart.yaml
 ├── README.md
 ├── charts/
 ├── templates
