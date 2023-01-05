@@ -6,7 +6,7 @@ subchart-test: # Chart.lock에 있는 name으로
   deployment:
     replicas: 0
     image:
-      repository: 932824558442.dkr.ecr.ap-northeast-2.amazonaws.com/nginx
+      repository: nginx
       tag: "1.23-alpine"
       digest: ""
       pullPolicy: IfNotPresent

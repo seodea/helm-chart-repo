@@ -1,5 +1,3 @@
-# ArgoCD 사용
-
 ## echoserver 용도
 
 Internal Test를 위한 Service입니다.
