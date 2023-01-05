@@ -1,5 +1,5 @@
 # dependency 설정
-subchart-test: # Chart.lock에 있는 name으로 
+subchart-test: # Chart.yaml에 있는 name으로 작서 후 변수값을 들여쓰기
   title: "a project guestbook"
   app: A
   env: dev
