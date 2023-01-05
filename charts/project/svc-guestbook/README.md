@@ -6,8 +6,12 @@ Main Helm Chart를 이용하여 간단하게 images, replica, ingress, label 정
 ### dependencies 작성
 
 echoserver의 Chart.yaml 내의 dependencies.repository는 `URL`를 사용을 하고 있습니다.
-git clone 시 Local에서 테스트 or Argo CD 내에서 모두 사용 가능합니다. 
-단, 사전에 해당 URL이 local repo에 add가 되어있어야 합니다.
+git clone 시 Local에서 테스트에만 가능 하며, ArgoCD에서 사용 시 Private URL일 경우 `권한 문제` 사용이 불가능합니다.
+
+에러 내용
+> rpc error: code = Unknown desc = Manifest generation error (cached): `helm repo add https:--gitlab.mzcloud.xyz-api-v4-projects-328-packages-helm-sdh https://gitlab.mzcloud.xyz/api/v4/projects/328/packages/helm/sdh` failed exit status 1: Error: looks like "https://gitlab.mzcloud.xyz/api/v4/projects/328/packages/helm/sdh" is not a valid chart repository or cannot be reached: failed to fetch https://gitlab.mzcloud.xyz/api/v4/projects/328/packages/helm/sdh/index.yaml : 401 Unauthorized
+
+단, 사전에 Local에서 테스트 시 해당 URL이 local repo에 add가 되어있어야 합니다.
 
 - local 테스트 방법
   ```
@@ -25,7 +29,7 @@ git clone 시 Local에서 테스트 or Argo CD 내에서 모두 사용 가능합
 dependencies:
   - name: subchart-test # Parent chart name 이름 
     version: 0.1.0 # Parent chart version 기입 (helm package version 변경 시 원하는 버전으로 변경 필요)
-    repository: "@github-helm" # parent chart path (Argo CD repositories)
+    repository: "https://gitlab.mzcloud.xyz/api/v4/projects/328/packages/helm/sdh" # Private URL일 경우 되지않음 ArgoCD에서 테스트 시 Public URL로 변경 필수
 ```
 
 ## Argo CD 배포 방식
