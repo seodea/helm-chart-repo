@@ -60,6 +60,7 @@ app.kubernetes.io/name: {{ include "main.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 env: {{ .Values.env }}
 app: {{ .Values.app }}
+owner: {{ .Values.owner }}
 {{- end }}
 
 {{/*
