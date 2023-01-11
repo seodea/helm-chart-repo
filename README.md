@@ -24,6 +24,16 @@ project : service 폴더 (현재 3가지의 서비스가 있음 echoserver, gues
     │   │   ├── eks-ingress.yml
     │   │   └── service.yaml
     │   └── values.yaml
+    ├── main-rollout
+    │   ├── Chart.yaml
+    │   ├── charts
+    │   ├── templates
+    │   │   ├── NOTES.txt
+    │   │   ├── _helpers.tpl
+    │   │   ├── rollouts.yaml
+    │   │   ├── eks-ingress.yml
+    │   │   └── service.yaml
+    │   └── values.yaml
     └── project
         ├── svc-echoserver
         │   ├── Chart.yaml
