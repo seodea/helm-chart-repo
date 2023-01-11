@@ -1,7 +1,6 @@
 title: "eks nginx app"
 env: ""
 app: ""
-owner: sdh
 
 deployment:
   replicas: 2

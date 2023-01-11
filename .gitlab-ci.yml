@@ -29,7 +29,7 @@ stages:
   tags:
     - shared-runner
 
-.plan:
+plan:
   stage: plan
   script:
     - helm template ./charts/main
@@ -40,7 +40,7 @@ stages:
   tags:
     - shared-runner
 
-.package:
+package:
   stage: package
   script:
     - pwd
@@ -59,7 +59,7 @@ stages:
   tags:
     - shared-runner
   
-.upload:
+upload:
   stage: upload
   script:
     - helm repo add --username sdh --password ${MY_ACCESS_TOKEN} ${CHART_NAME}-${CHART_VERSION} https://${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/packages/helm/${CHANNEL}
