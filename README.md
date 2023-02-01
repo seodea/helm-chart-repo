@@ -4,18 +4,23 @@
 
 Subchart 구조를 사용 하기 위한 구조입니다.
 main : helm chart 폴더
-project : service 폴더 (현재 3가지의 서비스가 있음 echoserver, guestbook, nginx) 모두 main helm package를 dependency로 사용
+project : service 폴더 (현재 4가지의 서비스 제공)
+- 기본 Object 용 : echoserver, guestbook, nginx  
+(모두 main helm package를 dependency로 사용)
+- Rollout Ojbect용 : rollout-echoserver  
+(main-rollout helm package를 dependency로 사용)
+
 
 > 단, 현재 Argo CD에서 배포를 하므로 Chart.yaml의 dependency가 path와 alias 로 설정이 되어 있습니다.
 > 테스트 시 각 서비스의 Chart.yaml에서 원하는 값으로 변경 후 사용해야 합니다.
 
 ```
 .
-├── .gitlab-ci.yml
 ├── README.md
 └── charts
     ├── main
     │   ├── Chart.yaml
+    │   ├── README.md
     │   ├── charts
     │   ├── templates
     │   │   ├── NOTES.txt
@@ -26,15 +31,17 @@ project : service 폴더 (현재 3가지의 서비스가 있음 echoserver, gues
     │   └── values.yaml
     ├── main-rollout
     │   ├── Chart.yaml
+    │   ├── README.md
     │   ├── charts
     │   ├── templates
     │   │   ├── NOTES.txt
     │   │   ├── _helpers.tpl
-    │   │   ├── rollouts.yaml
     │   │   ├── eks-ingress.yml
+    │   │   ├── rollouts.yml
     │   │   └── service.yaml
     │   └── values.yaml
     └── project
+        ├── README.md
         ├── svc-echoserver
         │   ├── Chart.yaml
         │   ├── README.md
@@ -45,15 +52,26 @@ project : service 폴더 (현재 3가지의 서비스가 있음 echoserver, gues
         │   └── values-test.yaml
         ├── svc-guestbook
         │   ├── Chart.yaml
+        │   ├── README.md
         │   ├── charts
+        │   ├── dev-guestbook-project.yaml
         │   ├── values-dev.yaml
         │   ├── values-prod.yaml
         │   └── values-test.yaml
-        └── svc-nginx
+        ├── svc-nginx
+        │   ├── Chart.yaml
+        │   ├── README.md
+        │   ├── charts
+        │   ├── dev-nginx-application.yaml
+        │   ├── values-dev.yaml
+        │   ├── values-prod.yaml
+        │   └── values-test.yaml
+        └── svc-rollout-echoserver
             ├── Chart.yaml
             ├── README.md
             ├── charts
-            ├── project-nginx-application.yaml
+            ├── dev-echoserver-project.yaml
+            ├── test.yaml
             ├── values-dev.yaml
             ├── values-prod.yaml
             └── values-test.yaml
