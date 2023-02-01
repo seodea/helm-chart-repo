@@ -57,8 +57,8 @@ rollout-subchart-test: # Chart.yaml에 있는 name으로 작서 후 변수값을
     enabled: true
     scheme: internet-facing #internet-facing or internal
     target_type: instance #select target-type 지정 (ip | instance(기본값))
-    subnets: subnet-09f1ab2ff6e4f2988,subnet-0eccba1b1190cc500
-    security_groups: sg-05e3d194ad1ebcd80
+    subnets: subnet-01925fe3fdb467412,subnet-0183b83ada5e17406
+    security_groups: sg-0c7bdaaa1ea434dae
 
     hosts:
       - host: #chart-example.local
