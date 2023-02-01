@@ -30,7 +30,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.rollout.resources | nindent 12 }}
-    strategy:
+  strategy:
     canary:
       {{- if .Values.rollout.maxSurge -}}
       maxSurge: .Values.rollout.maxSurge    # 마지막 setWeight 이후 최대 Rollout 될 pod 비율 정의
