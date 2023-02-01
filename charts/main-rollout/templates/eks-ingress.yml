@@ -4,13 +4,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "main.fullname" . }}
+  name: {{ include "main.fullname" . }}-ingress
   labels:
     {{- include "main.labels" . | nindent 4 }}
   annotations:
     {{- include "ingress.annotations" . | nindent 4 }}
 spec:
-  ingressClassName: alb
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
@@ -21,9 +20,19 @@ spec:
             pathType: {{ .pathType }}
             backend:
                 service: 
-                  name: {{ $svcName }}
+                  {{- if and ($.Values.service.rootService.enabled) (empty .name) }}
+                  name: {{ $svcName }}-root-svc
+                  {{- else if .name }}
+                  name: {{ $svcName }}-{{ .name }}-svc
+                  {{- else }}
+                  name: {{ $svcName }}-stable-svc
+                  {{- end }} 
                   port:
-                    number: {{$svcPort}}
+                    {{- if .number }}
+                    number: {{ .number }}
+                    {{- else if empty .number }}
+                    name: use-annotation
+                    {{- end }}
           {{- end }}
     {{- end }}
 {{- end }}

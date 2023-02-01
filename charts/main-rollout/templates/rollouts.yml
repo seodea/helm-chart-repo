@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "main.fullname" . }}
+  labels:
+    {{- include "main.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.rollout.replicas }}
+  selector:
+    matchLabels:
+      {{- include "main.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "main.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.rollout.image.repository }}:{{ .Values.rollout.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ default "IfNotPresent" .Values.rollout.image.pullPolicy }}
+          ports:
+          - containerPort: {{ include "main.port" . }}
+          {{- if .Values.rollout.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.rollout.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.rollout.resources | nindent 12 }}
+    strategy:
+    canary:
+      {{- if .Values.rollout.maxSurge -}}
+      maxSurge: .Values.rollout.maxSurge    # 마지막 setWeight 이후 최대 Rollout 될 pod 비율 정의
+      {{- end }}
+      {{- if .Values.rollout.maxUnavailable -}}
+      maxUnavailable: .Values.rollout.maxUnavailable  # 업데이트 될 때 사용할 수 없는 pod의 최대 수
+      {{- end }}
+      canaryService: {{ include "main.fullname" . }}-canary-svc
+      stableService: {{ include "main.fullname" . }}-stable-svc
+      trafficRouting:
+        alb:
+          ingress: {{ include "main.fullname" . }}-ingress # fill a ingress name out
+          # Reference to a Service that the Ingress must target in one of the rules (optional).
+          # If omitted, uses canary.stableService.
+          {{- if .Values.service.rootService.enabled }}
+          rootService: {{ include "main.fullname" . }}-root-svc
+          {{- end }} 
+          # Service port is the port which the Service listens on (required).
+          servicePort: 80
+          # stick session이 필요한 경우
+          # stickinessConfig:
+          #   enabled: true
+          #   durationSeconds: 3600
+      steps: 
+      {{- include "strategy.step" . | nindent 6  }}

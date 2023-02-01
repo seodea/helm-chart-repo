@@ -25,15 +25,6 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
-Define service name
-*/}}
-{{- define "service.fullname" -}}
-{{- if .Values.service.enabled }}
-{{- printf "%s-%s" "svc" .Values.service.name | trunc 63 }}
-{{- end }}
-{{- end }}
-
-{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "main.chart" -}}
@@ -67,10 +58,52 @@ Container port
 */}}
 
 {{- define "main.port" -}}
-{{- if .Values.deployment.port.enabled -}}
-{{- .Values.deployment.port.containerport }}
+{{- if .Values.rollout.port.enabled -}}
+{{- .Values.rollout.port.containerport }}
 {{- else }}
 {{- "" }}
+{{- end }}
+{{- end }}
+
+{{/*
+Rollout connect service
+*/}}
+{{- define "rollout.svc" }}
+canaryService: {{ include "main.fullname" $ }}-canary-svc
+stableService: {{ include "main.fullname" $ }}-stable-svc
+{{- end }}
+
+
+{{/*
+strategy steps
+*/}}
+{{- define "strategy.step" -}}
+{{- if .Values.rollout.strategy }}
+{{- .Values.rollout.strategy | toYaml }}
+{{- else -}}
+- setWeight: 20
+- pause: { duration: 5m }
+- setWeight: 30
+- pause: { duration: 10m }
+- setWeight: 70
+- pause: { duration: 60m }
+- pause: {}
+{{- end }}
+{{- end }}
+
+{{/*
+Create Service 
+*/}}
+{{- define "create.service" -}}
+{{- if .Values.service.rootService.enabled }}
+name:
+    - canary
+    - stable
+    - root
+{{- else }}
+name:
+    - canary
+    - stable
 {{- end }}
 {{- end }}
 
@@ -79,6 +112,7 @@ Ingress annotation
 */}}
 
 {{- define "ingress.annotations" -}}
+kubernetes.io/ingress.class: alb
 alb.ingress.kubernetes.io/scheme: {{ .Values.ingress.scheme }}
 alb.ingress.kubernetes.io/target-type: {{ .Values.ingress.target_type }}
 {{- if .Values.ingress.subnets }}

@@ -1,8 +1,9 @@
-title: "eks nginx app"
+title: "rollout chart"
 env: ""
 app: ""
 
-deployment:
+rollout:
+  type: canary
   replicas: 2
   image:
     repository: 932824558442.dkr.ecr.ap-northeast-2.amazonaws.com/nginx
@@ -32,18 +33,32 @@ deployment:
     #   path: /
     #   port: http
 
-service:
-  enabled: true
-  name: http
-  type: NodePort
-  port: 80
+  # maxSurge: "25%"
+  # maxUnavailable: 0
+  
+  strategy: # {}
+    - setWeight: 10
+    - pause: { duration: 1m }
+    - setWeight: 20
+    - pause: { duration: 2m }
+    - setWeight: 30
+    - pause: { duration: 5m }
+    - pause: {}
 
-basic_ingress: 
-  enabled: false
+# canary+stable service
+service:
+  port: 80
+  protocol: TCP
+  type: NodePort
+  canary :
+    - canary # 필수
+    - stable # 필수
+    - root
+  rootService:
+    enabled: false
 
 ingress:
-  enabled: false
-  
+  enabled: true
   scheme: internet-facing #internet-facing or internal
   target_type: instance #select target-type 지정 (ip | instance(기본값))
   subnets: subnet-09f1ab2ff6e4f2988,subnet-0eccba1b1190cc500
@@ -55,4 +70,6 @@ ingress:
         - path: /
           pathType: Prefix #Exact, Prefix
         - path: /test
+          name: canary
           pathType: Exact
+          number: 80
