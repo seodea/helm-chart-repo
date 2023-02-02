@@ -49,3 +49,6 @@ helm:
   valueFiles:
     - values-test.yaml or values-prod.yaml
 ```
+
+## 테스트 방법
+Image를 변경을 하여 배포하여 테스트를 합니다.

@@ -1,11 +1,11 @@
-## guestbook 용도
+## nginx 용도
 
 Internal Test를 위한 Service입니다.
 Main Helm Chart를 이용하여 간단하게 images, replica, ingress, label 정도만 수정을 합니다.
 
 ### dependencies 작성
 
-echoserver의 Chart.yaml 내의 dependencies.repository는 Alias `@`를 사용을 하고 있습니다.
+nginx의 Chart.yaml 내의 dependencies.repository는 Alias `@`를 사용을 하고 있습니다.
 해당 Alias의 이름은 Argo CD에서 등록한 `Repositories 이름`과 동일해야 합니다. (여기선 mzc-gitlab-helm을 사용)
 git clone 시 Local에서 테스트 or Argo CD 내에서 모두 사용 가능합니다. 
 단, 사전에 해당 URL이 `local repo`시 해당 `alias 이름`으로 `add`가 되어있어야 합니다.
