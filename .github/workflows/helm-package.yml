@@ -1,0 +1,16 @@
+name: Create and upload chart
+on: push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: unwrittenmedia/helm3-push-action@v1.0.2
+      env:
+        SOURCE_DIR: 'charts'
+        CHART_FOLDER: 'main-rollout'
+        FORCE: 'True'
+        CHARTMUSEUM_URL: 'https://seodea.github.io/helm-package'
+        CHARTMUSEUM_USER: ''
+        CHARTMUSEUM_PASSWORD: ''
