@@ -15,6 +15,19 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  helm-validate:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container: wotnek90/helm-package:v1
+    
+      - name: checkout
+        uses: actions/checkout@v3
+        
+      - name: validate
+        run: |
+          helm version
+          helm lint ./charts/main-rollout
+    
   # This workflow contains a single job called "build"
   helm-package:
     # The type of runner that the job will run on
@@ -26,11 +39,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: checkout
         uses: actions/checkout@v3
-        
-      - name: validate
-        run: |
-          helm version
-          helm lint ./charts/main-rollout
           
       # Runs a single command using the runners shell
       - name: Run a one-line script
