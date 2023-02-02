@@ -2,15 +2,9 @@ name: Create and upload chart
 on: push
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - uses: unwrittenmedia/helm3-push-action@v1.0.2
-      env:
-        SOURCE_DIR: 'charts'
-        CHART_FOLDER: 'main-rollout'
-        FORCE: 'True'
-        CHARTMUSEUM_URL: 'https://${{ secrets.GITLAB_URL }}/api/v4/projects/${{ secrets.PROJECT_ID }}/packages/helm/${{ secrets.CHARTMUSEUM_USER }}'
-        CHARTMUSEUM_USER: '${{ secrets.CHARTMUSEUM_USER }}'
-        CHARTMUSEUM_PASSWORD: '${{ secrets.CHARTMUSEUM_PASSWORD }}'
+  package:
+    - name: Helm Package
+      # You may pin to the exact commit or the version.
+      # uses: Flydiverny/helm-package-action@38c209238e15e179e4bcfbc6caac15e9a4156f05
+      uses: Flydiverny/helm-package-action@0.1.0
+      args: charts/main-rollout
