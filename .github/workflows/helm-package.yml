@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     container: wotnek90/helm-package:v1
     
+    steps:
       - name: checkout
         uses: actions/checkout@v3
         
