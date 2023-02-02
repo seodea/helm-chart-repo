@@ -18,7 +18,8 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: wotnek90/helm-package:v1
+    runs-on: ubuntu-latest
+    container: wotnek90/helm-package:v1
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
