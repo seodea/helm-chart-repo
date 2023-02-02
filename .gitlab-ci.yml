@@ -21,7 +21,7 @@ validate:
   stage: validate
   script:
     - helm version
-    - helm lint ./charts/main
+    - helm lint ./charts/main-rollout
   allow_failure: false
   only:
     refs:
@@ -32,7 +32,7 @@ validate:
 .plan:
   stage: plan
   script:
-    - helm template ./charts/main
+    - helm template ./charts/main-rollout
   allow_failure: false
   only:
     refs:
@@ -45,12 +45,12 @@ validate:
   script:
     - pwd
     - ls -l
-    - helm package ./charts/main
-    # - helm repo index ./charts/main
+    - helm package ./charts/main-rollout
+    # - helm repo index ./charts/main-rollout
   artifacts:
     paths:
       - ./${CHART_NAME}-${CHART_VERSION}.tgz
-      # - ./charts/main/index.yaml
+      # - ./charts/main-rollout/index.yaml
   # when: manual
   allow_failure: false
   only:
