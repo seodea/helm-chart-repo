@@ -5,7 +5,7 @@ rollout-subchart-test: # Chart.yaml에 있는 name으로 작서 후 변수값을
 
   rollout:
     type: canary
-    replicas: 6
+    replicas: 2
     image:
       repository: 932824558442.dkr.ecr.ap-northeast-2.amazonaws.com/nginx
       tag: 1.23-alpine
