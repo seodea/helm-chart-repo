@@ -11,6 +11,6 @@ jobs:
         SOURCE_DIR: 'charts'
         CHART_FOLDER: 'main-rollout'
         FORCE: 'True'
-        CHARTMUSEUM_URL: 'https://${{ GITLAB_URL }}/api/v4/projects/${{ PROJECT_ID }}/packages/helm/${{ secrets.CHARTMUSEUM_USER }}'
+        CHARTMUSEUM_URL: https://'${{ GITLAB_URL }}'/api/v4/projects/'${{ PROJECT_ID }}'/packages/helm/'${{ CHARTMUSEUM_USER }}'
         CHARTMUSEUM_USER: '${{ secrets.CHARTMUSEUM_USER }}'
         CHARTMUSEUM_PASSWORD: '${{ secrets.CHARTMUSEUM_PASSWORD }}'
